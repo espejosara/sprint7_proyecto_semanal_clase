@@ -1,11 +1,3 @@
-import express from 'express';
-
-const app = express();
-
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-
 // src/db/products.js
 export const products = [
   { id: 1, name: "Teclado Mecánico", price: 100 },
@@ -13,6 +5,3 @@ export const products = [
   { id: 3, name: "Ratón Inalámbrico", price: 50 },
   { id: 4, name: "Grafica", price: 30 },
 ];
-
-
-export default app;
