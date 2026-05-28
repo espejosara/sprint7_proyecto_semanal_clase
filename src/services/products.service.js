@@ -35,3 +35,16 @@ export const updateProduct = (id, dataToUpdate) => {
   products[productIndex] = updatedProduct;
   return updatedProduct;
 };
+
+// Elimina un producto existente por su ID
+export const deleteProduct = (id) => {
+  const idNumber = Number(id);
+  const productIndex = products.findIndex(p => p.id === idNumber);
+
+  if (productIndex === -1) {
+    return null; // Retorna null si no existe
+  }
+
+  const deletedProduct = products.splice(productIndex, 1);
+  return deletedProduct[0]; // Retornamos el producto que acabamos de borrar
+};

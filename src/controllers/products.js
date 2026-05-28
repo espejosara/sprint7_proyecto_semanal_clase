@@ -55,3 +55,14 @@ export const updateProduct = (req, res) => {
     res.status(404).json({ ok: false, error: { message: "Product not found" } });
   }
 };
+
+export const deleteProduct = (req, res) => {
+  const { id } = req.params;
+  const deletedProduct = productsService.deleteProduct(id);
+
+  if (deletedProduct) {
+    res.status(200).json({ ok: true, data: deletedProduct });
+  } else {
+    res.status(404).json({ ok: false, error: { message: "Product not found" } });
+  }
+};
