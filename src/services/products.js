@@ -1,4 +1,4 @@
-import { products } from '../db/productos.js';
+import { products } from '../db/products.js';
 
 // Retorna todos los productos
 export const getAllProducts = () => {
@@ -9,7 +9,7 @@ export const getAllProducts = () => {
 export const getProductById = (id) => {
   const idNumber = Number(id);
   const productoEncontrado = products.find(producto => producto.id === idNumber);
-  return productoEncontrado; // Retornará el producto o undefined si no lo encuentra
+  return productoEncontrado; 
 };
 
 // Crea un nuevo producto y lo añade al array
