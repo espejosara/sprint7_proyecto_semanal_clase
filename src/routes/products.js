@@ -7,4 +7,6 @@ router.get('/api/products', productsController.getAllProducts);
 
 router.get('/api/products/:id', productsController.getProductById);
 
+router.post('/api/products', productsController.createProduct);
+
 export default router;
