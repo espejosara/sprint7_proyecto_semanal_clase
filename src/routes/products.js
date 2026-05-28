@@ -9,4 +9,6 @@ router.get('/api/products/:id', productsController.getProductById);
 
 router.post('/api/products', productsController.createProduct);
 
+router.put('/api/products/:id', productsController.updateProduct);
+
 export default router;

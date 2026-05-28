@@ -20,3 +20,18 @@ export const createProduct = (data) => {
   products.push(newProduct);
   return newProduct;
 };
+
+// Actualiza un producto existente por su ID
+export const updateProduct = (id, dataToUpdate) => {
+  const idNumber = Number(id);
+  const productIndex = products.findIndex(p => p.id === idNumber);
+
+  if (productIndex === -1) {
+    return null; // Retorna null si el producto no se encuentra
+  }
+
+  // Actualiza el producto en el array
+  const updatedProduct = { ...products[productIndex], ...dataToUpdate };
+  products[productIndex] = updatedProduct;
+  return updatedProduct;
+};
