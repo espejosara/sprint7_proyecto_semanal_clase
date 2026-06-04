@@ -1,50 +1,41 @@
-import { products } from '../db/products.js';
+import prisma from '../config/prismaClient.js';
 
 // Retorna todos los productos
-export const getAllProducts = () => {
-  return products;
+export const getAllProducts = async () => {
+  return await prisma.product.findMany();
 };
 
 // Busca y retorna un producto por su ID
-export const getProductById = (id) => {
-  const idNumber = Number(id);
-  const productoEncontrado = products.find(producto => producto.id === idNumber);
-  return productoEncontrado; 
+export const getProductById = async (id) => {
+  return await prisma.product.findUnique({
+    where: { id: id }
+  }); 
 };
 
-// Crea un nuevo producto y lo añade al array
-export const createProduct = (data) => {
-  // Calculamos el nuevo ID basándonos en el último producto (o 1 si el array está vacío)
-  const newId = products.length > 0 ? Math.max(...products.map(p => p.id)) + 1 : 1;
-  const newProduct = { id: newId, ...data };
-  products.push(newProduct);
-  return newProduct;
+// Crea un nuevo producto y lo añade a la base de datos
+export const createProduct = async (data) => {
+  return await prisma.product.create({
+    data: { ...data, stock: data.stock || 0 } // Si no envían stock, le ponemos 0 por defecto
+  });
 };
 
-// Actualiza un producto existente por su ID
-export const updateProduct = (id, dataToUpdate) => {
-  const idNumber = Number(id);
-  const productIndex = products.findIndex(p => p.id === idNumber);
+// Actualiza un producto existente
+export const updateProduct = async (id, dataToUpdate) => {
+  const productExists = await getProductById(id);
+  if (!productExists) return null; // Si no existe, cortamos aquí
 
-  if (productIndex === -1) {
-    return null; // Retorna null si el producto no se encuentra
-  }
-
-  // Actualiza el producto en el array
-  const updatedProduct = { ...products[productIndex], ...dataToUpdate };
-  products[productIndex] = updatedProduct;
-  return updatedProduct;
+  return await prisma.product.update({
+    where: { id: id },
+    data: dataToUpdate
+  });
 };
 
-// Elimina un producto existente por su ID
-export const deleteProduct = (id) => {
-  const idNumber = Number(id);
-  const productIndex = products.findIndex(p => p.id === idNumber);
+// Elimina un producto existente
+export const deleteProduct = async (id) => {
+  const productExists = await getProductById(id);
+  if (!productExists) return null; // Si no existe, cortamos aquí
 
-  if (productIndex === -1) {
-    return null; // Retorna null si no existe
-  }
-
-  const deletedProduct = products.splice(productIndex, 1);
-  return deletedProduct[0]; // Retornamos el producto que acabamos de borrar
+  return await prisma.product.delete({
+    where: { id: id }
+  });
 };
