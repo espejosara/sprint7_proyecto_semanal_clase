@@ -1,4 +1,4 @@
-import * as productsService from '../services/products.service.js';
+import * as productsService from '../services/products.js';
 
 export const getAllProducts = (req, res) => {
   const products = productsService.getAllProducts();
