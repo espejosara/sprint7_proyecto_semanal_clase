@@ -1,4 +1,4 @@
-import prisma from '../config/prismaClient.js';
+import prisma from '../db/prisma.js';
 
 // Retorna todos los productos
 export const getAllProducts = async () => {
