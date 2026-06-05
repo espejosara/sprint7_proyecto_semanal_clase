@@ -3,4 +3,5 @@ export const notFound = (req, res, next) => {
     ok: false,
     error: `Ruta no encontrada: ${req.method} ${req.url}`,
   });
+  next();
 };
