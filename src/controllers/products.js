@@ -14,11 +14,11 @@ export const getProductById = async (req, res, next) => {
     const { id } = req.params;
     const productoEncontrado = await productsService.getProductById(id);
     
-    if (productoEncontrado) {
-      res.status(200).json({ ok: true, data: productoEncontrado });
-    } else {
-      res.status(404).json({ ok: false, error: { message: "Product not found" } });
+    if (!productoEncontrado) {
+      return res.status(404).json({ ok: false, error: { message: "Product not found" } });
     }
+    
+    res.status(200).json({ ok: true, data: productoEncontrado });
   } catch (error) {
     next(error);
   }
@@ -40,11 +40,11 @@ export const updateProduct = async (req, res, next) => {
     const { name, price, description, stock, imageUrl } = req.body;
     const updatedProduct = await productsService.updateProduct(id, { name, price, description, stock, imageUrl });
 
-    if (updatedProduct) {
-      res.status(200).json({ ok: true, data: updatedProduct });
-    } else {
-      res.status(404).json({ ok: false, error: { message: "Product not found" } });
+    if (!updatedProduct) {
+      return res.status(404).json({ ok: false, error: { message: "Product not found" } });
     }
+    
+    res.status(200).json({ ok: true, data: updatedProduct });
   } catch (error) {
     next(error);
   }
@@ -55,11 +55,11 @@ export const deleteProduct = async (req, res, next) => {
     const { id } = req.params;
     const deletedProduct = await productsService.deleteProduct(id);
 
-    if (deletedProduct) {
-      res.status(200).json({ ok: true, data: deletedProduct });
-    } else {
-      res.status(404).json({ ok: false, error: { message: "Product not found" } });
+    if (!deletedProduct) {
+      return res.status(404).json({ ok: false, error: { message: "Product not found" } });
     }
+    
+    res.status(200).json({ ok: true, data: deletedProduct });
   } catch (error) {
     next(error);
   }
