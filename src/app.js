@@ -12,7 +12,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(indexRoutes);
 app.use(productsRoutes);
 
-// Middlewares de manejo de errores (¡siempre al final!)
 app.use(notFound);
 app.use(errorHandler);
 
