@@ -1,7 +1,11 @@
-import { PrismaClient } from "@prisma/client"; // Es la herramienta principal de Prisma para hacer peticiones
-import { PrismaPg } from "@prisma/adapter-pg"; // adaptador de prisma para postgreSQL
+import { PrismaPg } from "@prisma/adapter-pg";
+import pkg from "@prisma/client";
+const { PrismaClient } = pkg;
+import pg from "pg";
+const { Pool } = pg;
 
-const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
+const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
 
 export default prisma;
