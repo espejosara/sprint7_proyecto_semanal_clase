@@ -5,6 +5,7 @@ import rateLimit from 'express-rate-limit';
 import indexRoutes from './routes/index.routes.js';
 import productsRoutes from './routes/products.js';
 import authRoutes from './routes/auth.routes.js';
+import usersRoutes from './routes/users.routes.js';
 import { notFound } from './middlewares/notFound.js';
 import { errorHandler } from './middlewares/errorHandler.js';
 
@@ -26,6 +27,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(indexRoutes);
 app.use(authRoutes);
 app.use(productsRoutes);
+app.use(usersRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
