@@ -19,6 +19,9 @@ export const register = async (req, res, next) => {
       }
     });
   } catch (error) {
+    if (error.message === 'El correo electrónico ya está registrado') {
+      return res.status(400).json({ ok: false, error: error.message });
+    }
     next(error);
   }
 };
