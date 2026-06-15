@@ -23,5 +23,5 @@ export const validateProduct = (req, res, next) => {
     }
   }
 
-  next(); // Si las validaciones pasan, le decimos que continúe hacia el controlador
+  next(); 
 };

@@ -4,6 +4,6 @@ export const requireRole = (requiredRole) => {
       return res.status(403).json({ ok: false, error: 'Acceso denegado. No tienes permisos suficientes.' });
     }
     
-    next(); // Si el rol es el correcto, le dejamos pasar
+    next(); 
   };
 };
