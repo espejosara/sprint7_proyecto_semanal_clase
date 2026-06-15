@@ -26,6 +26,13 @@ export const register = async (req, res, next) => {
   }
 };
 
+export const logout = (req, res) => {
+  res.status(200).json({
+    ok: true,
+    message: "Sesión cerrada. Recuerda eliminar el token de tu cliente (ej. localStorage o Postman)."
+  });
+};
+
 export const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
