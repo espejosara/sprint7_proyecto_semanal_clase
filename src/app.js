@@ -6,6 +6,8 @@ import indexRoutes from './routes/index.routes.js';
 import productsRoutes from './routes/products.js';
 import authRoutes from './routes/auth.routes.js';
 import usersRoutes from './routes/users.routes.js';
+import reviewsRoutes from './routes/reviews.routes.js';
+import wishlistRoutes from './routes/wishlist.routes.js';
 import { notFound } from './middlewares/notFound.js';
 import { errorHandler } from './middlewares/errorHandler.js';
 
@@ -28,6 +30,8 @@ app.use(indexRoutes);
 app.use(authRoutes);
 app.use(productsRoutes);
 app.use(usersRoutes);
+app.use(reviewsRoutes);
+app.use(wishlistRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
