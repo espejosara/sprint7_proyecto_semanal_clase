@@ -7,8 +7,8 @@ jest.unstable_mockModule('../../models/wishlist.model.js', () => ({
   }
 }));
 
-const { toggleProductInWishlist } = await import('../../services/wishlist.service.js');
-const { default: Wishlist } = await import('../../models/wishlist.model.js');
+const { toggleProductInWishlist } = await import('../../src/services/wishlist.service.js');
+const { default: Wishlist } = await import('../../src/models/wishlist.model.js');
 
 describe('Wishlist Service', () => {
 

@@ -16,8 +16,8 @@ jest.unstable_mockModule('../../models/review.model.js', () => {
   };
 });
 
-const { getReviewsByProductId, createReview } = await import('../../services/reviews.service.js');
-const { default: Review } = await import('../../models/review.model.js');
+const { getReviewsByProductId, createReview } = await import('../../src/services/reviews.service.js');
+const { default: Review } = await import('../../src/models/review.model.js');
 
 describe('Reviews Service', () => {
 
