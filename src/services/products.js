@@ -1,28 +1,24 @@
 import prisma from '../lib/prisma.js';
 
-// Retorna todos los productos
 export const getAllProducts = async () => {
   return await prisma.product.findMany();
 };
 
-// Busca y retorna un producto por su ID
 export const getProductById = async (id) => {
   return await prisma.product.findUnique({
     where: { id: id }
   }); 
 };
 
-// Crea un nuevo producto y lo añade a la base de datos
 export const createProduct = async (data) => {
   return await prisma.product.create({
-    data: { ...data, stock: data.stock || 0 } // Si no envían stock, le ponemos 0 por defecto
+    data: { ...data, stock: data.stock || 0 } 
   });
 };
 
-// Actualiza un producto existente
 export const updateProduct = async (id, dataToUpdate) => {
   const productExists = await getProductById(id);
-  if (!productExists) return null; // Si no existe, cortamos aquí
+  if (!productExists) return null; 
 
   return await prisma.product.update({
     where: { id: id },
@@ -30,10 +26,8 @@ export const updateProduct = async (id, dataToUpdate) => {
   });
 };
 
-// Elimina un producto existente
 export const deleteProduct = async (id) => {
   const productExists = await getProductById(id);
-  if (!productExists) return null; // Si no existe, cortamos aquí
 
   return await prisma.product.delete({
     where: { id: id }

@@ -15,8 +15,8 @@ app.use(helmet());
 app.use(cors());
 
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutos
-  max: 100, // Límite de 100 peticiones por cada IP en esos 15 minutos
+  windowMs: 15 * 60 * 1000, 
+  max: 100, 
   message: "Demasiadas peticiones desde esta IP, por favor intenta de nuevo más tarde."
 });
 app.use(limiter);
