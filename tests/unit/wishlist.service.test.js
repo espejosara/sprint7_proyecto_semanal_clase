@@ -1,7 +1,7 @@
 import { jest } from '@jest/globals';
 
 
-jest.unstable_mockModule('../../models/wishlist.model.js', () => ({
+jest.unstable_mockModule('../../src/models/wishlist.model.js', () => ({
   default: {
     findOne: jest.fn()
   }
@@ -18,7 +18,6 @@ describe('Wishlist Service', () => {
 
   describe('toggleProductInWishlist', () => {
     it('debería agregar un producto a la wishlist si no existe', async () => {
-     
       const userId = 'user-1';
       const productId = 'product-1';
       
@@ -32,8 +31,8 @@ describe('Wishlist Service', () => {
 
       await toggleProductInWishlist(userId, productId);
 
-      expect(mockWishlist.productIds).toContain(productId); // Esperamos que el producto se haya añadido al array.
-      expect(mockWishlist.save).toHaveBeenCalledTimes(1); // Esperamos que se haya llamado a la función para guardar.
+      expect(mockWishlist.productIds).toContain(productId);
+      expect(mockWishlist.save).toHaveBeenCalledTimes(1);
     });
 
     it('debería eliminar un producto de la wishlist si ya existe', async () => {
@@ -49,8 +48,8 @@ describe('Wishlist Service', () => {
 
       await toggleProductInWishlist(userId, productId);
 
-      expect(mockWishlist.productIds).not.toContain(productId); // Esperamos que el producto haya sido eliminado.
-      expect(mockWishlist.productIds).toContain('product-2'); // Nos aseguramos que no borró los otros productos.
+      expect(mockWishlist.productIds).not.toContain(productId);
+      expect(mockWishlist.productIds).toContain('product-2');
       expect(mockWishlist.save).toHaveBeenCalledTimes(1);
     });
   });

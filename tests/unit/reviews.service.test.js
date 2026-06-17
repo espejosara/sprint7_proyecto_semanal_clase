@@ -4,7 +4,7 @@ const mockSort = jest.fn();
 const mockFind = jest.fn().mockReturnValue({ sort: mockSort });
 const mockSave = jest.fn();
 
-jest.unstable_mockModule('../../models/review.model.js', () => {
+jest.unstable_mockModule('../../src/models/review.model.js', () => {
   return {
     default: class ReviewMock {
       constructor(data) {
