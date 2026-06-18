@@ -10,13 +10,12 @@
     "dev": "node --watch --env-file=.env src/server.js",
     "postinstall": "prisma generate",
     "db:push": "prisma db push"
-
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@prisma/adapter-pg": "7.8.0",
+    "@prisma/adapter-pg": "^7.8.0",
     "@prisma/client": "7.8.0",
     "bcrypt": "6.0.0",
     "cors": "2.8.6",
@@ -26,9 +25,9 @@
     "jest": "^30.4.2",
     "jsonwebtoken": "9.0.3",
     "mongoose": "^9.7.0",
-    "pg": "8.21.0"
+    "pg": "^8.21.0"
   },
   "devDependencies": {
-    "prisma": "7.8.0"
+    "prisma": "^7.8.0"
   }
 }
