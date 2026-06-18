@@ -15,6 +15,8 @@ model Product {
   imageUrl    String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  cartItems   CartItem[]
+  orderItems  OrderItem[]
 }
 
 model User {
@@ -23,6 +25,50 @@ model User {
   password  String
   role      String   @default("user")
   createdAt DateTime @default(now()) @map("created_at")
+  carts     Cart[]
+  orders    Order[]
 
   @@map("users")
+}
+
+enum CartStatus {
+  ACTIVE
+  CHECKED_OUT
+}
+
+model Cart {
+  id        String     @id @default(cuid())
+  userId    Int
+  status    CartStatus @default(ACTIVE)
+  createdAt DateTime   @default(now())
+  items     CartItem[]
+  user      User       @relation(fields: [userId], references: [id])
+}
+
+model CartItem {
+  id        String  @id @default(cuid())
+  cartId    String
+  productId String
+  quantity  Int
+  cart      Cart    @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  product   Product @relation(fields: [productId], references: [id])
+}
+
+model Order {
+  id        String      @id @default(cuid())
+  userId    Int
+  total     Float
+  createdAt DateTime    @default(now())
+  items     OrderItem[]
+  user      User        @relation(fields: [userId], references: [id])
+}
+
+model OrderItem {
+  id              String  @id @default(cuid())
+  orderId         String
+  productId       String
+  quantity        Int
+  priceAtPurchase Float
+  order           Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product         Product @relation(fields: [productId], references: [id])
 }
