@@ -1,0 +1,95 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Ecommerce API",
+    "version": "1.0.0",
+    "description": "Documentación de la API del proyecto"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "paths": {
+    "/api/auth/login": {
+      "post": {
+        "summary": "Iniciar sesión",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": { "type": "string" },
+                  "password": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Token JWT generado" }
+        }
+      }
+    },
+    "/api/products": {
+      "get": {
+        "summary": "Obtener todos los productos",
+        "responses": {
+          "200": { "description": "Lista de productos" }
+        }
+      }
+    },
+    "/api/cart": {
+      "get": {
+        "summary": "Obtener carrito activo",
+        "security": [ { "bearerAuth": [] } ],
+        "responses": {
+          "200": { "description": "Carrito del usuario" }
+        }
+      }
+    },
+    "/api/cart/items": {
+      "post": {
+        "summary": "Añadir producto al carrito",
+        "security": [ { "bearerAuth": [] } ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "productId": { "type": "string" },
+                  "quantity": { "type": "number" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Producto añadido" }
+        }
+      }
+    },
+    "/api/cart/checkout": {
+      "post": {
+        "summary": "Realizar checkout del carrito",
+        "security": [ { "bearerAuth": [] } ],
+        "responses": {
+          "201": { "description": "Pedido finalizado exitosamente" }
+        }
+      }
+    }
+  }
+}

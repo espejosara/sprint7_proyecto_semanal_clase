@@ -1,6 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
+import swaggerUi from 'swagger-ui-express';
+import { readFileSync } from 'node:fs';
 import rateLimit from 'express-rate-limit';
 import indexRoutes from './routes/index.routes.js';
 import productsRoutes from './routes/products.js';
@@ -10,6 +12,8 @@ import reviewsRoutes from './routes/reviews.routes.js';
 import wishlistRoutes from './routes/wishlist.routes.js';
 import { notFound } from './middlewares/notFound.js';
 import { errorHandler } from './middlewares/errorHandler.js';
+
+const swaggerDocument = JSON.parse(readFileSync(new URL('../swagger.json', import.meta.url)));
 
 const app = express();
 
@@ -25,6 +29,8 @@ app.use(limiter);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use(indexRoutes);
 app.use(authRoutes);
