@@ -3,12 +3,10 @@
   "info": {
     "title": "Ecommerce API",
     "version": "1.0.0",
-    "description": "Documentación de la API del proyecto"
+    "description": "Documentación completa de la API del proyecto e-commerce"
   },
   "servers": [
-    {
-      "url": "http://localhost:3000"
-    }
+    { "url": "http://localhost:3000" }
   ],
   "components": {
     "securitySchemes": {
@@ -20,8 +18,43 @@
     }
   },
   "paths": {
+    "/health": {
+      "get": {
+        "tags": ["Sistema"],
+        "summary": "Health check del servidor",
+        "responses": {
+          "200": { "description": "Servidor funcionando correctamente" }
+        }
+      }
+    },
+    "/api/auth/register": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Registrar nuevo usuario",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["email", "password"],
+                "properties": {
+                  "email": { "type": "string", "format": "email" },
+                  "password": { "type": "string", "minLength": 6 }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Usuario creado exitosamente" },
+          "400": { "description": "Email ya registrado o datos inválidos" }
+        }
+      }
+    },
     "/api/auth/login": {
       "post": {
+        "tags": ["Auth"],
         "summary": "Iniciar sesión",
         "requestBody": {
           "required": true,
@@ -29,8 +62,9 @@
             "application/json": {
               "schema": {
                 "type": "object",
+                "required": ["email", "password"],
                 "properties": {
-                  "email": { "type": "string" },
+                  "email": { "type": "string", "format": "email" },
                   "password": { "type": "string" }
                 }
               }
@@ -38,29 +72,199 @@
           }
         },
         "responses": {
-          "200": { "description": "Token JWT generado" }
+          "200": { "description": "Token JWT generado" },
+          "401": { "description": "Credenciales inválidas" }
+        }
+      }
+    },
+    "/api/auth/logout": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Cerrar sesión (instrucción cliente)",
+        "responses": {
+          "200": { "description": "Sesión cerrada. Elimina el token en el cliente." }
+        }
+      }
+    },
+    "/api/users/profile": {
+      "get": {
+        "tags": ["Usuarios"],
+        "summary": "Obtener perfil del usuario autenticado",
+        "security": [ { "bearerAuth": [] } ],
+        "responses": {
+          "200": { "description": "Datos del usuario" },
+          "401": { "description": "No autorizado" }
         }
       }
     },
     "/api/products": {
       "get": {
+        "tags": ["Productos"],
         "summary": "Obtener todos los productos",
         "responses": {
           "200": { "description": "Lista de productos" }
+        }
+      },
+      "post": {
+        "tags": ["Productos"],
+        "summary": "Crear producto (ADMIN)",
+        "security": [ { "bearerAuth": [] } ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["name", "price", "stock"],
+                "properties": {
+                  "name": { "type": "string" },
+                  "description": { "type": "string" },
+                  "price": { "type": "number" },
+                  "stock": { "type": "integer" },
+                  "imageUrl": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Producto creado" },
+          "403": { "description": "Acceso denegado" }
+        }
+      }
+    },
+    "/api/products/{id}": {
+      "get": {
+        "tags": ["Productos"],
+        "summary": "Obtener un producto por ID",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": { "description": "Producto encontrado" },
+          "404": { "description": "Producto no encontrado" }
+        }
+      },
+      "put": {
+        "tags": ["Productos"],
+        "summary": "Actualizar producto (ADMIN)",
+        "security": [ { "bearerAuth": [] } ],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "description": { "type": "string" },
+                  "price": { "type": "number" },
+                  "stock": { "type": "integer" },
+                  "imageUrl": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Producto actualizado" },
+          "403": { "description": "Acceso denegado" }
+        }
+      },
+      "delete": {
+        "tags": ["Productos"],
+        "summary": "Eliminar producto (ADMIN)",
+        "security": [ { "bearerAuth": [] } ],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": { "description": "Producto eliminado" },
+          "403": { "description": "Acceso denegado" }
+        }
+      }
+    },
+    "/api/products/{id}/reviews": {
+      "get": {
+        "tags": ["Reviews"],
+        "summary": "Obtener reviews de un producto",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": { "description": "Lista de reviews" }
+        }
+      },
+      "post": {
+        "tags": ["Reviews"],
+        "summary": "Crear review para un producto",
+        "security": [ { "bearerAuth": [] } ],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["rating"],
+                "properties": {
+                  "rating": { "type": "integer", "minimum": 1, "maximum": 5 },
+                  "comment": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Review creada" },
+          "401": { "description": "No autorizado" }
+        }
+      }
+    },
+    "/api/wishlist": {
+      "get": {
+        "tags": ["Wishlist"],
+        "summary": "Obtener wishlist del usuario",
+        "security": [ { "bearerAuth": [] } ],
+        "responses": {
+          "200": { "description": "Wishlist del usuario" },
+          "401": { "description": "No autorizado" }
+        }
+      }
+    },
+    "/api/wishlist/{productId}": {
+      "post": {
+        "tags": ["Wishlist"],
+        "summary": "Añadir o quitar producto de wishlist (toggle)",
+        "security": [ { "bearerAuth": [] } ],
+        "parameters": [
+          { "name": "productId", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": { "description": "Wishlist actualizada" },
+          "401": { "description": "No autorizado" }
         }
       }
     },
     "/api/cart": {
       "get": {
-        "summary": "Obtener carrito activo",
+        "tags": ["Carrito"],
+        "summary": "Obtener carrito activo del usuario",
         "security": [ { "bearerAuth": [] } ],
         "responses": {
-          "200": { "description": "Carrito del usuario" }
+          "200": { "description": "Carrito del usuario" },
+          "401": { "description": "No autorizado" }
         }
       }
     },
     "/api/cart/items": {
       "post": {
+        "tags": ["Carrito"],
         "summary": "Añadir producto al carrito",
         "security": [ { "bearerAuth": [] } ],
         "requestBody": {
@@ -69,25 +273,46 @@
             "application/json": {
               "schema": {
                 "type": "object",
+                "required": ["productId", "quantity"],
                 "properties": {
                   "productId": { "type": "string" },
-                  "quantity": { "type": "number" }
+                  "quantity": { "type": "integer", "minimum": 1 }
                 }
               }
             }
           }
         },
         "responses": {
-          "201": { "description": "Producto añadido" }
+          "201": { "description": "Producto añadido al carrito" },
+          "400": { "description": "Datos inválidos" },
+          "401": { "description": "No autorizado" }
+        }
+      }
+    },
+    "/api/cart/items/{itemId}": {
+      "delete": {
+        "tags": ["Carrito"],
+        "summary": "Eliminar item del carrito",
+        "security": [ { "bearerAuth": [] } ],
+        "parameters": [
+          { "name": "itemId", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": { "description": "Item eliminado" },
+          "401": { "description": "No autorizado" },
+          "404": { "description": "Item no encontrado en tu carrito" }
         }
       }
     },
     "/api/cart/checkout": {
       "post": {
+        "tags": ["Carrito"],
         "summary": "Realizar checkout del carrito",
         "security": [ { "bearerAuth": [] } ],
         "responses": {
-          "201": { "description": "Pedido finalizado exitosamente" }
+          "201": { "description": "Pedido creado exitosamente" },
+          "400": { "description": "Carrito vacío o stock insuficiente" },
+          "401": { "description": "No autorizado" }
         }
       }
     }

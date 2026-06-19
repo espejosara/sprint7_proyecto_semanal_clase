@@ -31,6 +31,11 @@ export const addItemToCart = async (userId, productId, quantity) => {
 };
 
 export const removeItemFromCart = async (userId, itemId) => {
+  const cart = await getActiveCart(userId);
+  const itemBelongsToUser = cart.items.some(item => item.id === itemId);
+  if (!itemBelongsToUser) {
+    throw new Error('Item no encontrado en tu carrito');
+  }
   return await prisma.cartItem.delete({ where: { id: itemId } });
 };
 
@@ -38,14 +43,30 @@ export const checkout = async (userId) => {
   const cart = await getActiveCart(userId);
   if (cart.items.length === 0) throw new Error('El carrito esta vacio');
 
-  let total = 0;
-  const orderItemsData = cart.items.map(item => {
-    total += item.product.price * item.quantity;
-    return { productId: item.productId, quantity: item.quantity, priceAtPurchase: item.product.price };
-  });
-
   return await prisma.$transaction(async (tx) => {
-    const newOrder = await tx.order.create({ data: { userId, total, items: { create: orderItemsData } } });
+    let total = 0;
+    const orderItemsData = [];
+
+    for (const item of cart.items) {
+      const product = await tx.product.findUnique({ where: { id: item.productId } });
+      if (!product || product.stock < item.quantity) {
+        throw new Error(`Stock insuficiente para el producto: ${product?.name ?? item.productId}`);
+      }
+      total += product.price * item.quantity;
+      orderItemsData.push({
+        productId: item.productId,
+        quantity: item.quantity,
+        priceAtPurchase: product.price
+      });
+      await tx.product.update({
+        where: { id: item.productId },
+        data: { stock: product.stock - item.quantity }
+      });
+    }
+
+    const newOrder = await tx.order.create({
+      data: { userId, total, items: { create: orderItemsData } }
+    });
     await tx.cart.update({ where: { id: cart.id }, data: { status: 'CHECKED_OUT' } });
     return newOrder;
   });
