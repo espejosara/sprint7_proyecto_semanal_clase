@@ -17,6 +17,7 @@ import { errorHandler } from './middlewares/errorHandler.js';
 const swaggerDocument = JSON.parse(readFileSync(new URL('../swagger.json', import.meta.url)));
 
 const app = express();
+app.set('json spaces', 2);
 
 app.use(helmet());
 app.use(cors());
