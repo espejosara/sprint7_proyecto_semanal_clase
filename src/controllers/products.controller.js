@@ -15,7 +15,7 @@ export const getProductById = async (req, res, next) => {
     const productoEncontrado = await productsService.getProductById(id);
     
     if (!productoEncontrado) {
-      return res.status(404).json({ ok: false, error: { message: "Product not found" } });
+      return res.status(404).json({ ok: false, error: 'Product not found' });
     }
     
     res.status(200).json({ ok: true, data: productoEncontrado });
@@ -41,7 +41,7 @@ export const updateProduct = async (req, res, next) => {
     const updatedProduct = await productsService.updateProduct(id, { name, price, description, stock, imageUrl });
 
     if (!updatedProduct) {
-      return res.status(404).json({ ok: false, error: { message: "Product not found" } });
+      return res.status(404).json({ ok: false, error: 'Product not found' });
     }
     
     res.status(200).json({ ok: true, data: updatedProduct });
@@ -56,7 +56,7 @@ export const deleteProduct = async (req, res, next) => {
     const deletedProduct = await productsService.deleteProduct(id);
 
     if (!deletedProduct) {
-      return res.status(404).json({ ok: false, error: { message: "Product not found" } });
+      return res.status(404).json({ ok: false, error: 'Product not found' });
     }
     
     res.status(200).json({ ok: true, data: deletedProduct });

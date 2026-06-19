@@ -16,6 +16,10 @@ export const createReview = async (req, res, next) => {
     const { rating, comment } = req.body;
     const userId = req.user.userId;
 
+    if (!rating || rating < 1 || rating > 5) {
+      return res.status(400).json({ ok: false, error: 'El rating es obligatorio y debe estar entre 1 y 5' });
+    }
+
     const newReview = await reviewsService.createReview(productId, userId, rating, comment);
     res.status(201).json({ ok: true, data: newReview });
   } catch (error) {
