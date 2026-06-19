@@ -5,7 +5,7 @@ import swaggerUi from 'swagger-ui-express';
 import { readFileSync } from 'node:fs';
 import rateLimit from 'express-rate-limit';
 import indexRoutes from './routes/index.routes.js';
-import productsRoutes from './routes/products.js';
+import productsRoutes from './routes/products.routes.js';
 import authRoutes from './routes/auth.routes.js';
 import usersRoutes from './routes/users.routes.js';
 import reviewsRoutes from './routes/reviews.routes.js';

@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import * as productsController from '../controllers/products.js';
+import * as productsController from '../controllers/products.controller.js';
 import { validateProduct } from '../middlewares/validateProduct.js';
 import { authenticate } from '../middlewares/authenticate.js';
 import { requireRole } from '../middlewares/requireRole.js';
