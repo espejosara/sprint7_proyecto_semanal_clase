@@ -11,6 +11,7 @@ import usersRoutes from './routes/users.routes.js';
 import reviewsRoutes from './routes/reviews.routes.js';
 import wishlistRoutes from './routes/wishlist.routes.js';
 import cartRoutes from './routes/cart.routes.js';
+import uploadsRoutes from './routes/uploads.routes.js';
 import { notFound } from './middlewares/notFound.js';
 import { errorHandler } from './middlewares/errorHandler.js';
 
@@ -41,6 +42,7 @@ app.use(usersRoutes);
 app.use(reviewsRoutes);
 app.use(wishlistRoutes);
 app.use(cartRoutes);
+app.use(uploadsRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
