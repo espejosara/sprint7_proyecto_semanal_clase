@@ -17,6 +17,7 @@ Backend de e-commerce preparado para consumo desde frontend (React Ready), con a
 - MongoDB Atlas (Mongoose)
 - JWT
 - Swagger UI
+- Jest + Supertest
 - Helmet, CORS, Rate Limiter
 
 ## Arquitectura de datos
@@ -86,6 +87,18 @@ npm run dev
 npm run test
 npm run db:push
 ```
+
+## Testing automatizado
+
+- `npm run test` ejecuta la suite completa con Jest.
+- Incluye tests unitarios de servicios y tests de endpoints con Supertest.
+- Cobertura actual de endpoints:
+  - `GET /`
+  - `GET /health`
+  - `POST /api/auth/register`
+  - `POST /api/auth/login`
+  - `POST /api/auth/logout`
+  - `GET /api/uploads/products` (caso 404 esperado al usar metodo incorrecto)
 
 ## Endpoints principales
 
@@ -196,8 +209,10 @@ Backend React Ready completado:
 - Carrito y checkout
 - Swagger operativo
 - Deploy operativo
+- Cloudinary (subida de imagenes)
+- Supertest (tests de endpoints)
 
 Mejoras opcionales siguientes:
 
-- Cloudinary (subida de imagenes)
-- Supertest (tests de endpoints)
+- Integracion frontend React
+- Ampliar cobertura de tests e2e
