@@ -65,11 +65,16 @@ MONGO_URI="mongodb+srv://..."
 JWT_SECRET="tu_secreto"
 JWT_EXPIRES_IN="7d"
 PORT=3000
+CLOUDINARY_CLOUD_NAME="tu_cloud_name"
+CLOUDINARY_API_KEY="tu_api_key"
+CLOUDINARY_API_SECRET="tu_api_secret"
 ```
 
 Nota importante:
 - Para operaciones de esquema Prisma (`db push`) se usa `DIRECT_URL` en `prisma.config.ts`.
 - Si no existe `DIRECT_URL`, se usa `DATABASE_URL` como fallback.
+- `JWT_EXPIRES_IN` tiene fallback a `7d` si no se define.
+- Las variables de Cloudinary son necesarias para el endpoint `POST /api/uploads/products`.
 
 ## Instalacion y ejecucion local
 
@@ -146,6 +151,72 @@ npm run db:push
 
 - GET `/api/docs`
 
+## Ejemplos de uso real (curl)
+
+Usa la variable `API_BASE` para local o produccion:
+
+```bash
+API_BASE="http://localhost:3000"
+# API_BASE="https://sprint7-proyecto-semanal-clase.onrender.com"
+```
+
+### 1) Login (obtener token)
+
+```bash
+curl -X POST "$API_BASE/api/auth/login" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "admin@test.com",
+    "password": "123456"
+  }'
+```
+
+Respuesta esperada (ejemplo):
+
+```json
+{
+  "ok": true,
+  "data": {
+    "token": "JWT_TOKEN"
+  }
+}
+```
+
+### 2) Crear producto (ADMIN)
+
+```bash
+curl -X POST "$API_BASE/api/products" \
+  -H "Authorization: Bearer TU_TOKEN_ADMIN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Camiseta basica",
+    "description": "Camiseta gris cloudinary",
+    "price": 29.99,
+    "stock": 20,
+    "imageUrl": "https://res.cloudinary.com/tu_cloud/image/upload/v1/ejemplo.png"
+  }'
+```
+
+### 3) Subir imagen de producto (ADMIN)
+
+```bash
+curl -X POST "$API_BASE/api/uploads/products" \
+  -H "Authorization: Bearer TU_TOKEN_ADMIN" \
+  -F "image=@/ruta/a/tu/imagen.png"
+```
+
+Respuesta esperada (ejemplo):
+
+```json
+{
+  "ok": true,
+  "data": {
+    "imageUrl": "https://res.cloudinary.com/tu_cloud/image/upload/v1/sprint7-products/archivo.png",
+    "publicId": "sprint7-products/archivo"
+  }
+}
+```
+
 ## Respuesta estandar de la API
 
 Exito:
@@ -212,7 +283,26 @@ Backend React Ready completado:
 - Cloudinary (subida de imagenes)
 - Supertest (tests de endpoints)
 
-Mejoras opcionales siguientes:
+## Pendientes y proximos pasos
 
-- Integracion frontend React
-- Ampliar cobertura de tests e2e
+Pendiente minimo antes de cierre completo:
+
+- Verificar en produccion (`Render`) el endpoint `POST /api/uploads/products` con token ADMIN y archivo real.
+
+Mejoras opcionales:
+
+- Integracion con frontend React para consumo de login, productos, carrito y upload de imagen.
+- Ampliar cobertura de tests e2e/endpoint para productos, carrito, checkout, wishlist y reviews.
+- Integrar tests en CI (GitHub Actions) para ejecutar `npm run test` en cada push/PR.
+
+## Checklist final de validacion
+
+1. Ejecutar tests automatizados:
+  - `npm run test`
+2. Validar upload en local:
+  - `POST /api/uploads/products` con `multipart/form-data` (`image`)
+3. Validar flujo funcional:
+  - login -> crear/editar producto (ADMIN) -> carrito -> checkout
+4. Validar produccion (`Render`):
+  - Confirmar variables de entorno (DB, Mongo, JWT, Cloudinary)
+  - Repetir prueba de upload y prueba de health/docs

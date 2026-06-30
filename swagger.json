@@ -315,6 +315,38 @@
           "401": { "description": "No autorizado" }
         }
       }
+    },
+    "/api/uploads/products": {
+      "post": {
+        "tags": ["Uploads"],
+        "summary": "Subir imagen de producto (ADMIN)",
+        "security": [ { "bearerAuth": [] } ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": ["image"],
+                "properties": {
+                  "image": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Archivo de imagen (jpg, jpeg, png, webp; máximo 10MB)"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Imagen subida correctamente a Cloudinary" },
+          "400": { "description": "Archivo faltante o error de upload (Multer/Cloudinary)" },
+          "401": { "description": "No autorizado" },
+          "403": { "description": "Acceso denegado (requiere rol ADMIN)" },
+          "500": { "description": "Error interno del servidor" }
+        }
+      }
     }
   }
 }
