@@ -270,6 +270,12 @@ Error:
 
 Proyecto desplegado en Render con auto-deploy desde rama principal.
 
+Verificacion de disponibilidad en produccion (2026-06-30):
+
+- `GET /health`: `200 OK`
+- `GET /api/docs`: `301 -> 200 OK` (redirect normal de Swagger UI)
+- `POST /api/uploads/products` sin token: `401 No autorizado` (endpoint activo y protegido por auth)
+
 ## Estado del proyecto
 
 Backend React Ready completado:
@@ -287,13 +293,12 @@ Backend React Ready completado:
 
 Pendiente minimo antes de cierre completo:
 
-- Verificar en produccion (`Render`) el endpoint `POST /api/uploads/products` con token ADMIN y archivo real.
+- Verificar en produccion (`Render`) el upload completo con token ADMIN y archivo real para confirmar `201` y URL de Cloudinary.
 
 Mejoras opcionales:
 
 - Integracion con frontend React para consumo de login, productos, carrito y upload de imagen.
 - Ampliar cobertura de tests e2e/endpoint para productos, carrito, checkout, wishlist y reviews.
-- Integrar tests en CI (GitHub Actions) para ejecutar `npm run test` en cada push/PR.
 
 ## Checklist final de validacion
 
